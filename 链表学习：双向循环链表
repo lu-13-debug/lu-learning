@@ -1,0 +1,231 @@
+Description
+祖玛是一款曾经风靡全球的游戏，其玩法是：在一条轨道上初始排列着若干个彩色珠子，其中任意三个相邻的珠子不会完全同色。此后，你可以发射珠子到轨道上并加入原有序列中。一旦有三个或更多同色的珠子变成相邻，它们就会立即消失。这类消除现象可能会连锁式发生，其间你将暂时不能发射珠子。
+
+给定轨道上初始的珠子序列，然后是玩家所做的一系列操作。你的任务是，在各次操作之后及时计算出新的珠子序列。
+
+Input
+第一行是一个数字n，表示接下来输入n个字符串。
+
+第二行是一个由大写字母’A’~’Z’组成的字符串，表示轨道上初始的珠子序列，不同的字母表示不同的颜色。
+
+第三行是一个数字t，表示玩家共有t次操作。
+
+接下来的t行依次对应于各次操作。每次操作由一个数字k和一个大写字母描述，以空格分隔。其中，大写字母为新珠子的颜色。若插入前共有m颗珠子，位置[0,m-1]，则k ∈ [0, m]表示新珠子嵌入在轨道上的位置。在这个代码基础上修改
+#include<iostream>
+#include<string>
+using namespace std;
+#define ok 0
+#define error -1
+
+// 双向链表结点定义
+class ListNode
+{
+public:
+    char data;
+    ListNode* prev;  // 前驱指针
+    ListNode* next;  // 后继指针
+    ListNode() { prev = NULL; next = NULL; }
+};
+
+// 带头结点的双向循环链表类定义
+class LinkList
+{
+public:
+    ListNode* head;
+    int len;
+    // 操作定义
+    LinkList();
+    ~LinkList();
+    ListNode* LL_index(int i);       // 获取0-based位置的前驱节点
+    int LL_insert(int i, char item); // 在0-based位置i插入珠子
+    bool eliminate();                // 消除连续3个及以上相同颜色的珠子
+    void LL_display();               // 显示当前珠子序列
+};
+
+// 构造函数：初始化双向循环链表
+LinkList::LinkList()
+{
+    head = new ListNode();
+    head->next = head;  // 头结点后继指向自己
+    head->prev = head;  // 头结点前驱指向自己
+    len = 0;
+}
+
+// 析构函数：释放链表内存
+LinkList::~LinkList()
+{
+    if (head == NULL) return;
+    ListNode* p = head->next;
+    // 遍历删除所有节点（除头结点外）
+    while (p != NULL && p != head)
+    {
+        ListNode* q = p;
+        p = p->next;
+        delete q;
+        q = NULL;
+    }
+    delete head;  // 删除头结点
+    head = NULL;
+    len = 0;
+}
+
+// 索引函数：返回0-based位置i的前驱节点（便于插入）
+// i=0 → 头结点（插入到最前面）；i=len → 最后一个节点（插入到最后面）
+ListNode* LinkList::LL_index(int i)
+{
+    if (i < 0 || i > len) return NULL;  // 位置非法返回空
+    ListNode* p;
+    // 优化查找：前半段从头部找，后半段从尾部找
+    if (i <= len / 2)
+    {
+        p = head;
+        int j = 0;
+        while (j < i)
+        {
+            p = p->next;
+            j++;
+        }
+    }
+    else
+    {
+        p = head;
+        int j = len;
+        while (j >= i)
+        {
+            p = p->prev;
+            j--;
+        }
+    }
+    return p;
+}
+
+// 插入函数：在0-based位置i插入颜色为item的珠子
+int LinkList::LL_insert(int i, char item)
+{
+    if (i < 0 || i > len) return error;  // 修正：0-based位置判断
+    ListNode* p = LL_index(i);           // 获取插入位置的前驱节点
+    if (p == NULL) return error;
+
+    // 创建新节点并初始化
+    ListNode* newp = new ListNode();
+    newp->data = item;
+    // 双向链表插入逻辑：更新前驱和后继指针
+    newp->prev = p;
+    newp->next = p->next;
+    p->next->prev = newp;  // 原后继节点的前驱指向新节点
+    p->next = newp;        // 前驱节点的后继指向新节点
+
+    len++;  // 链表长度+1
+    return ok;
+}
+
+// 消除函数：查找并消除连续3个及以上相同颜色的珠子，返回是否发生消除
+bool LinkList::eliminate()
+{
+    if (len < 3) return false;  // 少于3个珠子无法消除
+    ListNode* p = head->next;
+    bool eliminated = false;
+
+    while (p != head)
+    {
+        char target_color = p->data;
+        int same_count = 1;  // 记录连续相同颜色的珠子数量
+
+        // 1. 向前查找相同颜色的珠子（前驱方向）
+        ListNode* left_ptr = p->prev;
+        while (left_ptr != head && left_ptr->data == target_color)
+        {
+            same_count++;
+            left_ptr = left_ptr->prev;
+        }
+
+        // 2. 向后查找相同颜色的珠子（后继方向）
+        ListNode* right_ptr = p->next;
+        while (right_ptr != head && right_ptr->data == target_color)
+        {
+            same_count++;
+            right_ptr = right_ptr->next;
+        }
+
+        // 3. 若连续数量≥3，执行消除
+        if (same_count >= 3)
+        {
+            eliminated = true;
+            // 遍历删除[left_ptr->next, right_ptr->prev]区间的节点
+            ListNode* curr = left_ptr->next;
+            while (curr != right_ptr)
+            {
+                ListNode* temp = curr;
+                curr = curr->next;
+                delete temp;  // 释放节点内存
+                len--;        // 链表长度减少
+            }
+            // 重新连接链表：left_ptr的后继指向right_ptr，right_ptr的前驱指向left_ptr
+            left_ptr->next = right_ptr;
+            right_ptr->prev = left_ptr;
+
+            // 关键：消除后从left_ptr开始重新检查（避免遗漏连锁消除）
+            p = left_ptr;
+        }
+
+        p = p->next;
+    }
+
+    return eliminated;
+}
+
+// 显示函数：输出当前珠子序列，空序列输出"-"
+void LinkList::LL_display()
+{
+    if (len == 0)
+    {
+        cout << "-" << endl;
+        return;
+    }
+    ListNode* p = head->next;
+    while (p != head)
+    {
+        cout << p->data;  // 移除空格，符合祖玛序列显示习惯
+        p = p->next;
+    }
+    cout << endl;
+}
+
+int main()
+{
+    int n;  // 题目要求的“后续输入字符串个数”（此处仅初始序列1个，故n=1）
+    cin >> n;
+
+    string initial_seq;  // 初始珠子序列
+    cin >> initial_seq;
+
+    LinkList zuma_list;  // 创建祖玛链表对象
+    // 初始化链表：插入初始珠子序列（循环次数为初始序列长度）
+    for (int i = 0; i < initial_seq.length(); i++)
+    {
+        zuma_list.LL_insert(i, initial_seq[i]);
+    }
+
+    int operation_count;  // 操作次数
+    cin >> operation_count;
+
+    // 处理每次插入操作
+    for (int i = 0; i < operation_count; i++)
+    {
+        int insert_pos;  // 插入位置（0-based）
+        char bead_color; // 新珠子颜色
+        cin >> insert_pos >> bead_color;
+
+        // 插入新珠子
+        if (zuma_list.LL_insert(insert_pos, bead_color) == ok)
+        {
+            // 连锁消除：直到没有可消除的珠子
+            while (zuma_list.eliminate()) {}
+        }
+
+        // 显示操作后的珠子序列
+        zuma_list.LL_display();
+    }
+
+    return 0;
+}
