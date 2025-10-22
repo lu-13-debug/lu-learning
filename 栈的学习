@@ -1,0 +1,87 @@
+Description
+请编写堆栈操作的具体实现代码，实现字符串的逆序输出，需自行实现堆栈。
+
+输入一个字符串，按字符按输入顺序压入堆栈，然后根据堆栈后进先出的特点，做逆序输出
+
+Input
+第一行输入t，表示有t个测试实例 第二起，每一行输入一个字符串，注意字符串不要包含空格
+
+字符串的输入可参考如下代码：
+
+#include
+
+int main()
+
+{ string str;
+
+Int len;
+
+cin>>str; //把输入的字符串保存在变量str中
+
+len = str.length() //获取输入字符串的长度
+
+}
+
+Output
+每行逆序输出每一个字符串:
+#include<iostream>
+#include<string>
+using namespace std;
+struct Stack {
+	char* data;
+	int top;
+	int maxsize;
+};
+void initstack(Stack& s, int size) {
+	s.data = new char[size];
+	s.top = -1;
+	s.maxsize = size;
+}
+void deletestack(Stack& s) {
+	delete[] s.data;
+}
+bool push(Stack& s, char ch) {
+	if (s.top == s.maxsize - 1) {
+		return false;
+	}
+	s.data[++s.top] = ch;
+	return true;
+}
+bool pop(Stack& s, char& ch) {
+	if (s.top == -1) {
+		return false;
+	}
+	ch = s.data[s.top--];
+	return true;
+}
+int main() {
+	int t;
+	cin >> t;
+	for (int i = 0; i < t; i++) {
+		string str;
+		int len;
+		cin >> str; //把输入的字符串保存在变量str中
+		len = str.length();//获取输入字符串的长度
+		Stack s;
+		initstack(s, len);
+		for (int i = 0; i < len; i++) {
+			push(s, str[i]);
+		}
+		char ch;
+		while (pop(s, ch)) {
+			cout << ch;
+		}
+		cout << endl;
+		deletestack(s);
+	}
+	return 0;
+}
+
+/**********************************************************************
+	Problem: 1391
+	User: 202400501074
+	Language: C++
+	Result: AC
+	Time:12 ms
+	Memory:2224 kb
+**********************************************************************/
