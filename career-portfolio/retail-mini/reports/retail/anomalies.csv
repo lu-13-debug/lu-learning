@@ -1,0 +1,2 @@
+﻿date,store_id,units,sales_cents,previous_sales_cents,dod_rate,baseline_cents,baseline_ratio,is_anomaly,baseline_status
+2026-02-14,S03,35,57925,324050,-0.8212467211850023,318175,0.18205390115502476,True,可用

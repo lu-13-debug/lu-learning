@@ -1,0 +1,105 @@
+{
+  "project": "客户工单管理接口测试",
+  "scope": "2026.10 个人学习实践；本地演示被测服务",
+  "started_at": "2026-10-12T21:13:16+08:00",
+  "transport": "真实 HTTP / 127.0.0.1 动态端口 / urllib 无代理",
+  "tests_run": 15,
+  "passed": 15,
+  "failures": 0,
+  "errors": 0,
+  "status": "通过",
+  "elapsed_seconds": 1.9702,
+  "cases": [
+    {
+      "id": "test_api.TicketAPITests.test_01_login_success_and_unique_sessions",
+      "name": "登录成功与会话令牌唯一性",
+      "status": "通过",
+      "elapsed_seconds": 0.0593
+    },
+    {
+      "id": "test_api.TicketAPITests.test_02_wrong_credentials_return_401",
+      "name": "错误凭据返回 401",
+      "status": "通过",
+      "elapsed_seconds": 0.0757
+    },
+    {
+      "id": "test_api.TicketAPITests.test_03_unauthenticated_and_forged_token_return_401",
+      "name": "未登录与伪造令牌返回 401",
+      "status": "通过",
+      "elapsed_seconds": 0.0733
+    },
+    {
+      "id": "test_api.TicketAPITests.test_04_create_ticket_and_sql_persistence_match",
+      "name": "创建工单与 SQL 落库一致",
+      "status": "通过",
+      "elapsed_seconds": 0.0601
+    },
+    {
+      "id": "test_api.TicketAPITests.test_05_title_length_inclusive_boundaries",
+      "name": "标题长度 1 / 100 边界",
+      "status": "通过",
+      "elapsed_seconds": 0.0726
+    },
+    {
+      "id": "test_api.TicketAPITests.test_06_empty_long_or_nonstring_title_rejected",
+      "name": "空白、超长与非字符串标题",
+      "status": "通过",
+      "elapsed_seconds": 0.0838
+    },
+    {
+      "id": "test_api.TicketAPITests.test_07_list_pagination_is_ordered_and_has_total",
+      "name": "列表分页顺序与总数",
+      "status": "通过",
+      "elapsed_seconds": 0.1021
+    },
+    {
+      "id": "test_api.TicketAPITests.test_08_invalid_pagination_rejected",
+      "name": "非法及重复分页参数",
+      "status": "通过",
+      "elapsed_seconds": 0.0638
+    },
+    {
+      "id": "test_api.TicketAPITests.test_09_valid_state_flow_is_persisted",
+      "name": "合法状态流转及 SQL 持久化",
+      "status": "通过",
+      "elapsed_seconds": 0.0894
+    },
+    {
+      "id": "test_api.TicketAPITests.test_10_illegal_transitions_do_not_change_database",
+      "name": "非法状态跳转不修改数据",
+      "status": "通过",
+      "elapsed_seconds": 0.1037
+    },
+    {
+      "id": "test_api.TicketAPITests.test_11_resolved_ticket_cannot_reopen",
+      "name": "已解决工单不能重新打开",
+      "status": "通过",
+      "elapsed_seconds": 0.1119
+    },
+    {
+      "id": "test_api.TicketAPITests.test_12_missing_ticket_or_endpoint_return_404",
+      "name": "工单及接口不存在返回 404",
+      "status": "通过",
+      "elapsed_seconds": 0.0561
+    },
+    {
+      "id": "test_api.TicketAPITests.test_13_users_cannot_read_or_modify_other_users_tickets",
+      "name": "不同账号工单访问与修改隔离",
+      "status": "通过",
+      "elapsed_seconds": 0.1155
+    },
+    {
+      "id": "test_api.TicketAPITests.test_14_malformed_duplicate_or_nonobject_json_return_400",
+      "name": "错误 JSON、重复键及非对象请求",
+      "status": "通过",
+      "elapsed_seconds": 0.0627
+    },
+    {
+      "id": "test_api.TicketAPITests.test_15_sql_injection_like_title_is_stored_as_plain_text",
+      "name": "SQL 注入样式文本安全落库",
+      "status": "通过",
+      "elapsed_seconds": 0.0659
+    }
+  ],
+  "diagnostics": []
+}

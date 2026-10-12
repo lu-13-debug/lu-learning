@@ -1,0 +1,107 @@
+{
+  "data_source": "synthetic / 合成数据；个人实战项目",
+  "seed": 20261012,
+  "window": {
+    "start": "2026-01-01 00:00:00",
+    "cutoff": "2026-06-30 23:59:59",
+    "timezone": "Asia/Shanghai（无时区本地时间）"
+  },
+  "runtime": {
+    "pandas": "3.0.1",
+    "numpy": "2.3.5"
+  },
+  "rows": {
+    "users": 1000,
+    "events": 33227,
+    "orders": 4771
+  },
+  "metrics": {
+    "uv": 1000,
+    "paid_orders": 3585,
+    "net_sales_cents": 92220231,
+    "gross_paid_cents": 102544641,
+    "refunded_cents": 10324410,
+    "submitted_orders": 4771,
+    "transacted_orders": 3987,
+    "payment_rate": 0.8356738629218193,
+    "net_buyers": 944,
+    "repeat_buyers": 815,
+    "repeat_purchase_rate": 0.8633474576271186
+  },
+  "funnel": {
+    "browse": 1000,
+    "cart": 998,
+    "purchase": 944
+  },
+  "segments": {
+    "高价值活跃买家": 567,
+    "活跃复购买家": 160,
+    "沉睡买家": 144,
+    "活跃首购买家": 73,
+    "未购用户": 56
+  },
+  "cleaning_audit": {
+    "users": {
+      "input_rows": 1003,
+      "removed": {
+        "missing_id": 0,
+        "invalid_id": 0,
+        "duplicate_id": 3,
+        "invalid_time": 0
+      },
+      "imputed": {
+        "missing_channel": 1
+      },
+      "output_rows": 1000
+    },
+    "events": {
+      "input_rows": 33256,
+      "removed": {
+        "missing_id": 0,
+        "duplicate_id": 25,
+        "unknown_user": 1,
+        "invalid_time": 3,
+        "invalid_event_type": 0,
+        "missing_product": 0
+      },
+      "imputed": {},
+      "output_rows": 33227
+    },
+    "orders": {
+      "input_rows": 4783,
+      "removed": {
+        "missing_id": 0,
+        "duplicate_id": 8,
+        "unknown_user": 0,
+        "invalid_time": 2,
+        "invalid_status": 0,
+        "invalid_amount": 2
+      },
+      "imputed": {},
+      "output_rows": 4771
+    }
+  },
+  "reconciliation": {
+    "status": "PASS",
+    "checks": [
+      {
+        "metric": "uv",
+        "pandas": 1000,
+        "sql": 1000,
+        "match": true
+      },
+      {
+        "metric": "paid_orders",
+        "pandas": 3585,
+        "sql": 3585,
+        "match": true
+      },
+      {
+        "metric": "net_sales_cents",
+        "pandas": 92220231,
+        "sql": 92220231,
+        "match": true
+      }
+    ]
+  }
+}

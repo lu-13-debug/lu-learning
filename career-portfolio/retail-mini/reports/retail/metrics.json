@@ -1,0 +1,19 @@
+{
+  "data_type": "模拟数据，仅用于分析练习",
+  "seed": 20261012,
+  "start_date": "2026-01-01",
+  "end_date": "2026-03-01",
+  "stores": 8,
+  "days": 60,
+  "source_rows": 5760,
+  "daily_rows": 480,
+  "sales_cents": 178992475,
+  "source_sales_cents": 178992475,
+  "baseline_available_rows": 424,
+  "anomaly_count": 1,
+  "injected_anomaly": {
+    "date": "2026-02-14",
+    "store_id": "S03"
+  },
+  "rule": "前7个完整自然日销售额中位数；当天严格低于60%标记；正基线才判断"
+}

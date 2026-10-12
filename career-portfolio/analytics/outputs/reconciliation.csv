@@ -1,0 +1,4 @@
+metric,pandas,sql,match
+uv,1000,1000,True
+paid_orders,3585,3585,True
+net_sales_cents,92220231,92220231,True

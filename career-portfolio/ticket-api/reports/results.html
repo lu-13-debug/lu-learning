@@ -1,0 +1,19 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>客户工单管理接口测试报告</title><style>
+body{font-family:'Microsoft YaHei',sans-serif;background:#f3f6fa;color:#16273b;margin:0}
+main{max-width:960px;margin:48px auto;padding:32px;background:white;border-radius:16px}
+.label{color:#48729b;font-size:14px}h1{font-size:28px;margin:12px 0}p{line-height:1.7;color:#52647a}
+.cards{display:flex;gap:16px;margin:28px 0}.card{flex:1;background:#edf5fa;padding:20px;border-radius:10px}
+.card b{display:block;font-size:28px;color:#16705b}table{width:100%;border-collapse:collapse}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #e5ebf2;font-size:14px}th{background:#f5f8fb}
+pre{white-space:pre-wrap;background:#fff0ef;padding:16px}footer{margin-top:24px;color:#66778a;font-size:12px}
+@media(max-width:650px){main{margin:12px;padding:20px}.cards{flex-wrap:wrap}.card{min-width:100px}}
+</style><main><div class="label">个人学习实践 · 2026.10 · PYTHON 标准库</div>
+<h1>客户工单管理接口测试</h1><p>本地演示服务的真实 HTTP 集成测试，覆盖登录、工单流转、权限隔离及数据库一致性。</p>
+<div class="cards"><div class="card">执行用例<b>15</b></div>
+<div class="card">通过<b>15</b></div><div class="card">失败 / 错误<b>0 / 0</b></div>
+<div class="card">总体结果<b>通过</b></div></div>
+<table><thead><tr><th>编号</th><th>测试案例</th><th>结果</th><th>耗时</th></tr></thead><tbody><tr><td>01</td><td>登录成功与会话令牌唯一性</td><td>通过</td><td>0.0593s</td></tr><tr><td>02</td><td>错误凭据返回 401</td><td>通过</td><td>0.0757s</td></tr><tr><td>03</td><td>未登录与伪造令牌返回 401</td><td>通过</td><td>0.0733s</td></tr><tr><td>04</td><td>创建工单与 SQL 落库一致</td><td>通过</td><td>0.0601s</td></tr><tr><td>05</td><td>标题长度 1 / 100 边界</td><td>通过</td><td>0.0726s</td></tr><tr><td>06</td><td>空白、超长与非字符串标题</td><td>通过</td><td>0.0838s</td></tr><tr><td>07</td><td>列表分页顺序与总数</td><td>通过</td><td>0.1021s</td></tr><tr><td>08</td><td>非法及重复分页参数</td><td>通过</td><td>0.0638s</td></tr><tr><td>09</td><td>合法状态流转及 SQL 持久化</td><td>通过</td><td>0.0894s</td></tr><tr><td>10</td><td>非法状态跳转不修改数据</td><td>通过</td><td>0.1037s</td></tr><tr><td>11</td><td>已解决工单不能重新打开</td><td>通过</td><td>0.1119s</td></tr><tr><td>12</td><td>工单及接口不存在返回 404</td><td>通过</td><td>0.0561s</td></tr><tr><td>13</td><td>不同账号工单访问与修改隔离</td><td>通过</td><td>0.1155s</td></tr><tr><td>14</td><td>错误 JSON、重复键及非对象请求</td><td>通过</td><td>0.0627s</td></tr><tr><td>15</td><td>SQL 注入样式文本安全落库</td><td>通过</td><td>0.0659s</td></tr></tbody></table>
+<footer>实际执行时间：2026-10-12T21:13:16+08:00 · 总耗时 1.9702s<br>
+被测对象为个人编写的本地练习 API；结果不代表企业系统质量、生产环境表现或完整安全审计。</footer></main></html>

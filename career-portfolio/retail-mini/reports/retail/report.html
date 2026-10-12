@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>零售门店销售日报与异常分析</title>
+<style>body{font:16px/1.65 system-ui,"Microsoft YaHei",sans-serif;color:#203040;background:#f3f5f8;margin:0}
+main{max-width:1040px;margin:auto;padding:30px 22px}h1{font-size:30px}h2{font-size:21px}.notice{background:#fff0cc;padding:16px;border-radius:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:22px 0}.card,section{background:white;border-radius:12px;padding:22px;margin-bottom:20px}
+.card b{display:block;font-size:25px}small,.muted{color:#536477}table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;text-align:left;border-bottom:1px solid #e6ebf1}
+.bar{height:7px;background:#387cb1;border-radius:5px;max-width:100%}svg{width:100%;height:auto}a{color:#24689c}.table-wrap{overflow-x:auto}</style>
+<main><h1>零售门店销售日报与异常分析</h1><p class="muted">2026-01-01 至 2026-03-01 · 8 家门店 · Python + SQLite</p>
+<p class="notice"><strong>模拟数据 / 行业练习。</strong>2026-02-14 的 S03 销量被主动调低，用于验证异常规则。此页面仅展示分析流程，不能作为真实经营结论，也不能证明异常原因。</p>
+<div class="cards"><div class="card">期间销售额（元）<b>1,789,924.75</b></div>
+<div class="card">门店日报记录<b>480</b></div><div class="card">可用基线记录<b>424</b></div><div class="card">规则标记异常<b>1</b></div></div>
+<section><h2>S03 每日销售额与过去 7 日中位数</h2><p>蓝线为销售额，虚线为历史基线，红点为规则异常。单位：元。前 7 天不生成基线。</p>
+<svg viewBox="0 0 920 300" role="img" aria-label="S03 每日销售走势，2月14日出现主动注入的下滑">
+<line x1="50" y1="245" x2="880" y2="245" stroke="#ccd5df"/>
+<text x="5" y="58" font-size="13">3,864</text><text x="20" y="249" font-size="13">0</text>
+<polyline points="50.0,87.2 64.1,88.5 78.1,88.1 92.2,83.3 106.3,86.2 120.3,84.1 134.4,86.3 148.5,83.3 162.5,84.5 176.6,85.0 190.7,86.0 204.7,87.1 218.8,84.3 232.9,79.7 246.9,82.8 261.0,80.8 275.1,84.1 289.2,80.7 303.2,90.6 317.3,85.6 331.4,85.9 345.4,86.7 359.5,85.5 373.6,84.8 387.6,84.8 401.7,80.8 415.8,82.8 429.8,95.1 443.9,82.5 458.0,95.2 472.0,88.4 486.1,86.9 500.2,86.5 514.2,80.7 528.3,84.7 542.4,84.6 556.4,85.5 570.5,85.5 584.6,89.3 598.6,83.8 612.7,84.4 626.8,85.7 640.8,79.8 654.9,81.5 669.0,215.8 683.1,87.2 697.1,82.0 711.2,80.8 725.3,83.2 739.3,81.9 753.4,87.4 767.5,86.0 781.5,89.3 795.6,81.7 809.7,87.9 823.7,82.4 837.8,86.3 851.9,75.4 865.9,91.5 880.0,81.5" fill="none" stroke="#387cb1" stroke-width="2.5"/>
+<polyline points="148.5,86.3 162.5,86.2 176.6,84.5 190.7,84.5 204.7,85.0 218.8,85.0 232.9,85.0 246.9,84.5 261.0,84.5 275.1,84.3 289.2,84.1 303.2,82.8 317.3,82.8 331.4,82.8 345.4,84.1 359.5,85.6 373.6,85.6 387.6,85.6 401.7,85.6 415.8,85.5 429.8,84.8 443.9,84.8 458.0,84.8 472.0,84.8 486.1,84.8 500.2,86.9 514.2,86.9 528.3,86.9 542.4,86.5 556.4,86.5 570.5,85.5 584.6,85.5 598.6,85.5 612.7,84.7 626.8,84.7 640.8,85.5 654.9,85.5 669.0,84.4 683.1,84.4 697.1,84.4 711.2,84.4 725.3,82.0 739.3,82.0 753.4,82.0 767.5,83.2 781.5,83.2 795.6,83.2 809.7,83.2 823.7,86.0 837.8,86.0 851.9,86.3 865.9,86.0 880.0,86.3" fill="none" stroke="#8395a7" stroke-width="2" stroke-dasharray="6 5"/><circle cx="669.0" cy="215.8" r="6" fill="#bf3b33"><title>2026-02-14：模拟下滑，销售额 579.25 元</title></circle>
+<text x="50" y="280" font-size="13">01-01</text><text x="445" y="280" font-size="13">01-31</text><text x="845" y="280" font-size="13">03-01</text></svg></section>
+<section><h2>期间门店销售排名</h2><div class="table-wrap"><table><thead><tr><th>排名</th><th>门店</th><th>销售额（元）</th><th>期间占比</th></tr></thead><tbody><tr><td>1</td><td>S08</td><td><div class="bar" style="width:71.9%"></div>306,341.50</td><td>17.11%</td></tr><tr><td>2</td><td>S07</td><td><div class="bar" style="width:66.1%"></div>281,754.75</td><td>15.74%</td></tr><tr><td>3</td><td>S06</td><td><div class="bar" style="width:60.9%"></div>259,467.75</td><td>14.50%</td></tr><tr><td>4</td><td>S05</td><td><div class="bar" style="width:55.3%"></div>235,590.75</td><td>13.16%</td></tr><tr><td>5</td><td>S04</td><td><div class="bar" style="width:49.9%"></div>212,699.50</td><td>11.88%</td></tr><tr><td>6</td><td>S03</td><td><div class="bar" style="width:44.0%"></div>187,635.50</td><td>10.48%</td></tr><tr><td>7</td><td>S02</td><td><div class="bar" style="width:38.8%"></div>165,334.50</td><td>9.24%</td></tr><tr><td>8</td><td>S01</td><td><div class="bar" style="width:33.1%"></div>141,100.50</td><td>7.88%</td></tr></tbody></table></div></section>
+<section><h2>异常清单</h2><div class="table-wrap"><table><thead><tr><th>日期</th><th>门店</th><th>销售额（元）</th><th>7日基线（元）</th><th>基线比例</th></tr></thead><tbody><tr><td>2026-02-14</td><td>S03</td><td>579.25</td><td>3,181.75</td><td>18.2%</td></tr></tbody></table></div>
+<p>规则：当天销售额严格低于过去 7 个完整自然日中位数的 60%。历史缺日或基线为 0 时不标记异常。实际使用应先核对数据完整性、营业安排、促销与退货，再评估同星期基线和阈值。</p></section>
+<section><h2>口径与追溯</h2><p>销售额 = 数量 × 单价，金额使用整数分存储。日环比 =（当天 − 昨天）/ 昨天；缺少昨天或昨天为 0 时留空。每行流水代表一个门店日期下的 SKU 销售汇总，未模拟订单、折扣、税费和退货。</p>
+<p><a href="sales.csv">模拟销售流水</a> · <a href="daily_report.csv">门店日报</a> · <a href="store_ranking.csv">门店排名</a> · <a href="anomalies.csv">异常列表</a> · <a href="metrics.json">核验指标</a></p>
+<p>从异常日期与门店筛选流水，逐项计算 qty × unit_price_cents，即可复核当天金额；再对前 7 天每日金额取中位数，可复核基线。</p></section></main></html>

@@ -1,0 +1,139 @@
+{
+  "project": "电商Web页面自动化测试",
+  "data_source": "本地合成业务靶场",
+  "started_at": "2026-10-12T13:11:38.710Z",
+  "browser": "155.0.4283.45",
+  "status": "passed",
+  "fatal_error": null,
+  "total": 18,
+  "passed": 18,
+  "failed": 0,
+  "results": [
+    {
+      "id": "WEB-01",
+      "name": "首页展示商品与学习项目标识",
+      "status": "passed",
+      "duration_ms": 413,
+      "error": null
+    },
+    {
+      "id": "WEB-02",
+      "name": "正确账号登录成功",
+      "status": "passed",
+      "duration_ms": 337,
+      "error": null
+    },
+    {
+      "id": "WEB-03",
+      "name": "错误密码明确提示且保持未登录",
+      "status": "passed",
+      "duration_ms": 278,
+      "error": null
+    },
+    {
+      "id": "WEB-04",
+      "name": "空账号和密码被拦截",
+      "status": "passed",
+      "duration_ms": 232,
+      "error": null
+    },
+    {
+      "id": "WEB-05",
+      "name": "搜索结果与关键字一致",
+      "status": "passed",
+      "duration_ms": 249,
+      "error": null
+    },
+    {
+      "id": "WEB-06",
+      "name": "无匹配商品显示空状态",
+      "status": "passed",
+      "duration_ms": 235,
+      "error": null
+    },
+    {
+      "id": "WEB-07",
+      "name": "未登录加入购物车提示登录",
+      "status": "passed",
+      "duration_ms": 282,
+      "error": null
+    },
+    {
+      "id": "WEB-08",
+      "name": "加入商品后数量与金额一致",
+      "status": "passed",
+      "duration_ms": 431,
+      "error": null
+    },
+    {
+      "id": "WEB-09",
+      "name": "数量修改重新计算金额",
+      "status": "passed",
+      "duration_ms": 402,
+      "error": null
+    },
+    {
+      "id": "WEB-10",
+      "name": "数量零被拒绝且购物车不变",
+      "status": "passed",
+      "duration_ms": 356,
+      "error": null
+    },
+    {
+      "id": "WEB-11",
+      "name": "数量超过上限被拒绝",
+      "status": "passed",
+      "duration_ms": 404,
+      "error": null
+    },
+    {
+      "id": "WEB-12",
+      "name": "移除商品恢复空购物车",
+      "status": "passed",
+      "duration_ms": 457,
+      "error": null
+    },
+    {
+      "id": "WEB-13",
+      "name": "售罄商品禁用加购按钮",
+      "status": "passed",
+      "duration_ms": 178,
+      "error": null
+    },
+    {
+      "id": "WEB-14",
+      "name": "空购物车下单显示错误",
+      "status": "passed",
+      "duration_ms": 290,
+      "error": null
+    },
+    {
+      "id": "WEB-15",
+      "name": "收货地址过短被拒绝且保留商品",
+      "status": "passed",
+      "duration_ms": 454,
+      "error": null
+    },
+    {
+      "id": "WEB-16",
+      "name": "购物到下单完整链路并核对SQLite落库",
+      "status": "passed",
+      "duration_ms": 759,
+      "error": null
+    },
+    {
+      "id": "WEB-17",
+      "name": "退出登录后无法继续提交订单",
+      "status": "passed",
+      "duration_ms": 312,
+      "error": null
+    },
+    {
+      "id": "WEB-18",
+      "name": "独立浏览器上下文不共享购物车",
+      "status": "passed",
+      "duration_ms": 692,
+      "error": null
+    }
+  ]
+}

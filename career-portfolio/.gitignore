@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+node_modules/
+.venv/
+runtime/
+*_runtime/
+_work/
+*.db
+*.db-journal
+*.zip
+analytics/data/
+reports/web/*-failure.png
+reports/web/*-trace.zip

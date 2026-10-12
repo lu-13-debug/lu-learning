@@ -1,0 +1,9 @@
+{
+  "name": "career-commerce-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "电商Web自动化与数据分析个人实战项目",
+  "scripts": {"test:web": "node web-tests/run.cjs"},
+  "devDependencies": {"playwright": "1.62.1"},
+  "engines": {"node": ">=20"}
+}
