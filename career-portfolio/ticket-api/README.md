@@ -1,77 +1,61 @@
 # 客户工单管理接口测试
 
-2026 年 10 月独立完成的个人学习实践。为验证接口测试能力，自己编写一个本地工单 API，再通过真实 HTTP 请求检查接口行为与 SQLite 数据。使用演示账号和人工构造的工单，不涉及企业项目、真实客户或生产测试成绩。
+使用 Python 标准库搭建工单 API，并通过真实 HTTP 请求验证登录、创建、分页、状态流转、账号隔离和 SQLite 持久化，自动生成逐条测试结果报告。
 
-## 运行
+## 核心功能
 
-Python 3.10+，全部使用标准库，不需要安装第三方包。在本目录执行：
+- 15 条 unittest 测试方法，通过 subTest 覆盖正常输入、长度边界和异常请求。
+- 验证 `open → in_progress → resolved` 状态流转，拒绝跨级、重复流转和重新打开。
+- 双账号检查列表、详情和修改权限；非法操作后直接核对数据库未发生变更。
+- 检查错误 JSON、重复键、错误 UTF-8、非对象请求及异常 Unicode 标题。
+- 校验 HTTP 状态码、响应字段与 SQLite 落库结果，输出 JSON/HTML 报告。
+
+## 技术栈
+
+Python 3.10+ 标准库：unittest、urllib、http.server、sqlite3、JSON，无第三方依赖。
+
+## 快速开始
 
 ```powershell
+git clone https://github.com/lu-13-debug/customer-ticket-api-tests.git
+cd customer-ticket-api-tests
 python run_tests.py
 ```
 
-运行时启动 `127.0.0.1` 动态端口服务；客户端使用 `urllib` 并关闭代理，所有案例发送真实 HTTP 请求。测试结束后关闭服务器、线程与 SQLite 连接，删除本目录固定名称的测试数据库 `test-tickets.sqlite3`。测试之间清理演示数据；请勿并发运行两份测试进程。
+测试器自动启动本机动态端口服务，发送真实 HTTP 请求，结束后关闭服务器、线程与数据库连接，删除测试数据库。测试之间清理演示数据，同一工作目录使用固定测试数据库文件名，运行时避免同时启动两份测试进程。
 
-报告写入 `reports/results.json` 与 `reports/results.html`，包含实际执行时间、每条案例耗时、通过/失败结果及异常堆栈。测试失败时进程返回非零退出码；不会把异常吞掉或生成虚假的全通过结果。
-
-仅运行原生 unittest：
+只使用原生 unittest：`python -m unittest test_api -v`。
 
 ```powershell
-python -m unittest test_api -v
-```
-
-手动启动被测 API：
-
-```powershell
+# 手动启动 API
 python server.py --port 8000
 ```
 
-演示账号为 `alice / demo123`、`bob / demo123`。服务仅绑定本机地址，数据库默认 `tickets.sqlite3`。这些固定账号、无到期机制的演示会话仅用于本地练习；没有实现生产账号管理、密码存储、会话过期或完整安全审计。
+演示账号为 `alice / demo123`、`bob / demo123`，服务默认绑定 `127.0.0.1`。
 
 ## 接口契约
 
-| 方法 / 路径 | 请求 | 正常结果 | 主要异常 |
-| --- | --- | --- | --- |
-| `POST /login` | `{"username":"alice","password":"demo123"}` | 200，返回 token | 错误凭据 401；坏 JSON 400 |
-| `POST /tickets` | `{"title":"打印机无法连接"}` | 201，新工单为 open | 未登录 401；标题不合法 400 |
-| `GET /tickets?page=1&page_size=10` | 无请求体 | 200，仅返回当前账号工单及 total | 非法、重复或未知分页参数 400 |
-| `GET /tickets/{id}` | 无请求体 | 200，工单详情 | 不存在 404；他人工单 403 |
-| `PATCH /tickets/{id}` | `{"status":"in_progress"}` | 200，更新后的工单 | 非法流转 409；不存在 404；他人工单 403 |
+| 方法 / 路径 | 功能 | 主要检查 |
+|---|---|---|
+| POST /login | 登录并返回 token | 200 / 401，错误 JSON 为 400 |
+| POST /tickets | 创建 open 工单 | 201，标题与 owner 落库一致 |
+| GET /tickets | 当前账号工单分页 | total、排序、非法分页参数 400 |
+| GET /tickets/{id} | 工单详情 | 他人工单 403，不存在 404 |
+| PATCH /tickets/{id} | 更新状态 | 非法状态流转 409，权限与落库一致 |
 
-除登录外需请求头 `Authorization: Bearer <token>`。标题去除首尾空白后按 Python 字符数限制为 1–100，不允许 NUL 或孤立 Unicode 代理字符；分页 page 为 1–1,000,000，page_size 为 1–100，按工单 id 升序返回。状态只允许 `open → in_progress → resolved`；重复状态、跨级跳转和重开均拒绝。JSON 必须是对象，重复键、NaN/Infinity、错误 UTF-8 均返回 400。
+除登录外需 `Authorization: Bearer <token>`。标题去首尾空白后为 1—100 字符，拒绝 NUL 和孤立 Unicode 代理字符；page 为 1—1,000,000，page_size 为 1—100，按 id 升序返回。JSON 仅接受对象，拒绝重复键和 NaN/Infinity。
 
-SQLite 使用参数绑定保存文本，以数据库约束校验状态及标题长度；写入时在事务中读取和更新状态。测试直接查询数据库核对创建内容和最终状态，并验证非法操作后数据不变。
+## 测试范围与结果
 
-## 测试案例表
+15 条方法覆盖登录令牌、错误凭据、未授权访问、创建落库、标题边界、分页、状态流转、跨账号隔离、错误 JSON 与 SQL 注入样式文本。已补充未知账号且缺失密码、异常 Unicode 标题等回归子场景；非法输入返回 401/400 且不新增记录。
 
-以下是 15 条 unittest 测试方法，部分方法通过 subTest 覆盖多个输入，不把每个输入另算成独立用例。
+默认执行结果为 15 条真实 HTTP 测试通过。[JSON 结果](https://github.com/lu-13-debug/customer-ticket-api-tests/blob/main/reports/results.json) 与 [HTML 报告](https://github.com/lu-13-debug/customer-ticket-api-tests/blob/main/reports/results.html) 包含执行时间、逐条耗时、结果及异常堆栈；测试失败时返回非零退出码。
 
-| 编号 | 场景 | 预期 / 检查点 |
-| --- | --- | --- |
-| 01 | 登录成功与会话令牌 | 200；同账号重复登录和不同账号得到不同 token |
-| 02 | 错误密码、未知账号、缺失密码、非法账号类型 | 401，错误消息正确 |
-| 03 | 未登录、伪造 token | 401 |
-| 04 | 创建工单 | 201；HTTP 内容与 SQL owner/title/status 一致 |
-| 05 | 标题 1 / 100 字符 | 边界均创建成功 |
-| 06 | 空标题、空白、101 字符、非字符串、NUL、孤立代理字符 | 400；数据库中无新增记录 |
-| 07 | 分页与越界页 | 总数及升序正确，超出末页返回空数组 |
-| 08 | 非法及重复分页参数 | 400 |
-| 09 | 合法状态流转 | open → in_progress → resolved，SQL 最终值一致 |
-| 10 | 跨级、重复及未知状态 | 409；状态保持 open |
-| 11 | 已解决后重新打开 | 409 |
-| 12 | 不存在的工单及路径 | 404 |
-| 13 | 账号隔离 | 列表不泄露他人工单，读取/修改返回 403，原状态不变 |
-| 14 | 错误 JSON、重复键、数组、错误 UTF-8、NaN | 400 |
-| 15 | SQL 注入样式标题 | 作为普通文本保存，表和工单数据仍存在 |
+## 文件结构
 
-## 面试讲解
-
-可以这样介绍：“这是我在 2026 年 10 月做的个人接口测试练习。我自己实现了简化工单 API，用 Python unittest 和 urllib 发真实 HTTP 请求。围绕业务流转、标题边界、401/403/404/409、账号隔离和 SQL 一致性设计了 15 条测试方法，并保存 JSON 和 HTML 报告。测试数据是演示数据，服务只在本地运行。”
-
-测试过程中曾遇到 Windows 下测试数据库删除失败：`with sqlite3.connect(...)` 只控制事务，不会自动关闭连接。通过 `contextlib.closing` 显式关闭连接后重新执行测试，消除了清理错误。这个问题可以解释为一次真实的练习调试过程，不能表述为发现企业产品缺陷。
-
-补充未知账号和缺失密码组合时，测试还复现了登录判断缺陷：未知用户名通过字典 `get` 得到 `None`，恰好与缺失密码的 `None` 相等，错误返回 200。补上账号存在性判断后，该组合返回 401，并保留在第 02 条用例的子场景中。这是本地自建服务的缺陷与回归验证记录。
-
-审查后补充 Unicode 异常输入时，复现了 NUL 标题导致 SQLite 长度约束异常、孤立代理字符导致 UTF-8 编码异常，以及嵌入 NUL 的标题被错误接受。现已在入库前明确拒绝这些字符，返回 400；第 06 条子场景验证响应和无新增记录，仍保持 15 条测试方法。
-
-本项目只证明已覆盖案例在这份本地服务上的执行结果。没有进行压力测试、跨浏览器测试、企业上线验收或外部系统联调；也不声称 15 条案例覆盖了所有缺陷。
+```text
+server.py           HTTP 路由、业务规则和 SQLite 存储
+test_api.py         15 条测试方法与参数子场景
+run_tests.py        运行测试并导出报告
+reports/            results.json、results.html
+```
